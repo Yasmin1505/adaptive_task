@@ -2,7 +2,7 @@ import traceback
 
 from bs4 import BeautifulSoup
 
-from common.constants import TABLE_BODY, TABLE_DATA, TABLE, TABLE_ROW, FIVE, SIX
+from common.constants import TABLE_BODY, TABLE_DATA, TABLE, TABLE_ROW, COLUMN_COLLATERAL_ADJ, COLUMN_NAME
 
 
 def split_multiple_collateral_adjactive(coll_adj_str):
@@ -29,14 +29,14 @@ def scrape_page_content(page_content, element, element_name_dict):
             columns = row.find_all(TABLE_DATA)
             if len(columns) < 1:
                 continue
-            collateral_adjactives = split_multiple_collateral_adjactive(columns[FIVE].text)
+            collateral_adjactives = split_multiple_collateral_adjactive(columns[COLUMN_COLLATERAL_ADJ].text)
             if len(collateral_adjactives) > 1:
                 for coll_adj in collateral_adjactives:
-                    animal_name = clean_str(columns[SIX].text, ['\n'])
+                    animal_name = clean_str(columns[COLUMN_NAME].text, ['\n'])
                     name_to_collateral_adjective.append(f'{animal_name} : {coll_adj}')
             else:
-                animal_name = clean_str(columns[SIX].text, ['\n'])
-                name_to_collateral_adjective.append(f'{animal_name} : {columns[FIVE].text}')
+                animal_name = clean_str(columns[COLUMN_NAME].text, ['\n'])
+                name_to_collateral_adjective.append(f'{animal_name} : {columns[COLUMN_COLLATERAL_ADJ].text}')
     except Exception as ex:
         print(
             f'Failed to scrape web page with exception: {ex}, Traceback: {traceback.format_exc()}')  # [YS] I would use some kind of logger
